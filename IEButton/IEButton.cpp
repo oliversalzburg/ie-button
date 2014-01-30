@@ -15,22 +15,24 @@ namespace IEButton {
     HWND hWnd = static_cast<HWND>(ieWindow.ToPointer());
     HWND navigationBar = FindWindowEx(hWnd, nullptr, L"WorkerW", L"Navigation Bar");
     HWND reBar = FindWindowEx(navigationBar, nullptr, L"ReBarWindow32", nullptr);
-    HWND controlBar = FindWindowEx(reBar, nullptr, L"ControlBandClass", nullptr);
-    HWND hWndToolbar = FindWindowEx(controlBar, nullptr, L"ToolbarWindow32", L"Favorites and Tools Bar");
+    HWND hWndControlBar = FindWindowEx(reBar, nullptr, L"ControlBandClass", nullptr);
+    HWND hWndToolbar = FindWindowEx(hWndControlBar, nullptr, L"ToolbarWindow32", L"Favorites and Tools Bar");
 
-    TBADDBITMAP tbAddBitmap;
-    tbAddBitmap.hInst = HINST_COMMCTRL;
-    tbAddBitmap.nID = IDB_VIEW_SMALL_COLOR;
+    LRESULT imageList = SendMessage(hWndToolbar, TB_GETIMAGELIST, 0, 0);
+    LRESULT imageListHot = SendMessage(hWndToolbar, TB_GETHOTIMAGELIST, 0, 0);
+    LRESULT imageListPressed = SendMessage(hWndToolbar, TB_GETPRESSEDIMAGELIST, 0, 0);
 
-    int stdidx = SendMessage(hWndToolbar, TB_ADDBITMAP, 0, (LPARAM)&tbAddBitmap);
+    TBBUTTON buttonToAdd;
+    ZeroMemory( &buttonToAdd, sizeof( TBBUTTON ) );
+    buttonToAdd.iBitmap = 1;
+    buttonToAdd.idCommand = 1;
+    buttonToAdd.fsState = TBSTATE_ENABLED;
+    buttonToAdd.fsStyle = BTNS_BUTTON|BTNS_AUTOSIZE;
 
-    TBBUTTON buttonToAdd = {
-      stdidx + VIEW_LARGEICONS, 
-      1337, 
-      TBSTATE_ENABLED, 
-      BTNS_BUTTON
-    };
-
-    SendMessage(hWndToolbar, TB_INSERTBUTTON, 1, (LPARAM)&buttonToAdd);
+    LRESULT insertButtonResult = SendMessage( hWndToolbar, TB_INSERTBUTTON, 0, (LPARAM)&buttonToAdd );
+    
+    SendMessage(hWndToolbar, TB_AUTOSIZE, 0, 0);
+    SendMessage(hWndToolbar, WM_SIZE, 0, 0);
+    SendMessage(hWndControlBar, WM_SIZE, 0, 0);
   }
 }
