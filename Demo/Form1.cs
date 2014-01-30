@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using IEButton;
 
@@ -14,7 +10,14 @@ namespace Demo {
     }
 
     private void Form1_Load( object sender, EventArgs e ) {
-      ButtonInstaller installer = new ButtonInstaller();
+      IntPtr ieFrame = NativeMethods.FindWindowEx( IntPtr.Zero, IntPtr.Zero, "IEFrame", null );
+      if( ieFrame.Equals( IntPtr.Zero ) ) {
+        MessageBox.Show( "No IE window found" );
+        Application.Exit();
+      }
+
+      ButtonInstaller installer = ButtonInstaller.For(ieFrame);
+      installer.Install();
     }
   }
 }

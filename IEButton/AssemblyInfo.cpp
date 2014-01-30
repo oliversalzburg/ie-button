@@ -16,7 +16,7 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("")];
 [assembly:AssemblyProductAttribute("IEButton")];
-[assembly:AssemblyCopyrightAttribute("Copyright (c)  2014")];
+[assembly:AssemblyCopyrightAttribute("Copyright (c) Oliver Salzburg 2014")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
